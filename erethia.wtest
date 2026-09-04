@@ -1,3 +1,12 @@
 import rolando.*
 describe "Erethia" {
+
+    test "Rolando Recolentando artefactos" {
+        //rolando tiene la mochila vacia de manera default
+        rolando.recolectarArtefacto(espadaDelDestino)
+        rolando.recolectarArtefacto(libroHechizos)
+        rolando.recolectarArtefacto(collarDivino)
+        assert.equals([espadaDelDestino,libroHechizos], rolando.mochila())
+    }
+
 }
