@@ -9,4 +9,30 @@ describe "Erethia" {
         assert.equals([espadaDelDestino,libroHechizos], rolando.mochila())
     }
 
+    test "Castillo de Piedra" {
+        //rolando tiene la mochila vacia de manera default
+        rolando.recolectarArtefacto(espadaDelDestino)
+        rolando.recolectarArtefacto(libroHechizos)
+        castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+        rolando.recolectarArtefacto(collarDivino)
+        castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+        assert.equals([espadaDelDestino,libroHechizos,collarDivino], castilloDePiedra.artefactosDeCastillo())
+    }
+
+    test "Rolando conoce sus posesiones" {
+    rolando.recolectarArtefacto(collarDivino)
+    rolando.recolectarArtefacto(espadaDelDestino)
+
+    castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+
+    rolando.recolectarArtefacto(armaduraAceroValyrio)
+
+    assert.equals([collarDivino,espadaDelDestino,armaduraAceroValyrio], rolando.artefactosEnPosecion())
+    assert.notThat(rolando.poseeArtefacto(libroHechizos))
+}
+
+
+
+    
+
 }
