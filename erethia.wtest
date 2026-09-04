@@ -1,6 +1,6 @@
 import rolando.*
 describe "Erethia" {
-
+    //Parte 1 (Referencias)
     test "Rolando Recolentando artefactos" {
         //rolando tiene la mochila vacia de manera default
         rolando.recolectarArtefacto(espadaDelDestino)
@@ -29,7 +29,18 @@ describe "Erethia" {
 
     assert.equals([collarDivino,espadaDelDestino,armaduraAceroValyrio], rolando.artefactosEnPosecion())
     assert.notThat(rolando.poseeArtefacto(libroHechizos))
-}
+   }
+
+   test "Saber la historia de los encuentros con los artefactos" {
+    rolando.recolectarArtefacto(espadaDelDestino)
+    rolando.recolectarArtefacto(libroHechizos)
+    rolando.recolectarArtefacto(collarDivino)
+    castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+    rolando.recolectarArtefacto(armaduraAceroValyrio)
+    rolando.recolectarArtefacto(collarDivino)
+    assert.equals
+        ([espadaDelDestino,libroHechizos,collarDivino,armaduraAceroValyrio,collarDivino], rolando.historiaDeEncuentro())
+   }
 
 
 

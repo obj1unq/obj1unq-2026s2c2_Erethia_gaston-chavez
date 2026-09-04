@@ -1,11 +1,13 @@
 object rolando {
     var mochila = []
     var capacidadMochila = 2
+    var historiaDeEncuentro = []
 
     method recolectarArtefacto(artefacto) {
       if (mochila.size() < capacidadMochila){ //si la longitud de la mochila, es menor a la capidad de la mochila, agrega el elemento, caso contrario no
         mochila.add(artefacto)
       }
+      historiaDeEncuentro.add(artefacto)
     }
 
     method capacidadMochila(_capacidadMochila) {
@@ -18,6 +20,10 @@ object rolando {
 
     method poseeArtefacto(artefacto) {
       return self.mochila().contains(artefacto) //contains = contiene, pregunta si en la mochila dada, esta contenido el elemento dado
+    }
+
+    method historiaDeEncuentro() {
+      return historiaDeEncuentro
     }
 
     method mochila() {
