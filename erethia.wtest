@@ -3,47 +3,52 @@ describe "Erethia" {
     //Parte 1 (Referencias)
     test "Rolando Recolentando artefactos" {
         //rolando tiene la mochila vacia de manera default
-        rolando.recolectarArtefacto(espadaDelDestino)
-        rolando.recolectarArtefacto(libroHechizos)
-        rolando.recolectarArtefacto(collarDivino)
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(libroHechizos)
+        rolando.encontrarArtefacto(collarDivino)
         assert.equals([espadaDelDestino,libroHechizos], rolando.mochila())
     }
 
     test "Castillo de Piedra" {
         //rolando tiene la mochila vacia de manera default
-        rolando.recolectarArtefacto(espadaDelDestino)
-        rolando.recolectarArtefacto(libroHechizos)
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(libroHechizos)
         castilloDePiedra.dejarArtefactosEnCastillo(rolando)
-        rolando.recolectarArtefacto(collarDivino)
+        rolando.encontrarArtefacto(collarDivino)
         castilloDePiedra.dejarArtefactosEnCastillo(rolando)
         assert.equals([espadaDelDestino,libroHechizos,collarDivino], castilloDePiedra.artefactosDeCastillo())
     }
 
     test "Rolando conoce sus posesiones" {
-    rolando.recolectarArtefacto(collarDivino)
-    rolando.recolectarArtefacto(espadaDelDestino)
+    rolando.encontrarArtefacto(collarDivino)
+    rolando.encontrarArtefacto(espadaDelDestino)
 
     castilloDePiedra.dejarArtefactosEnCastillo(rolando)
 
-    rolando.recolectarArtefacto(armaduraAceroValyrio)
+    rolando.encontrarArtefacto(armaduraAceroValyrio)
 
     assert.equals([collarDivino,espadaDelDestino,armaduraAceroValyrio], rolando.artefactosEnPosecion())
     assert.notThat(rolando.poseeArtefacto(libroHechizos))
    }
 
    test "Saber la historia de los encuentros con los artefactos" {
-    rolando.recolectarArtefacto(espadaDelDestino)
-    rolando.recolectarArtefacto(libroHechizos)
-    rolando.recolectarArtefacto(collarDivino)
+    rolando.encontrarArtefacto(espadaDelDestino)
+    rolando.encontrarArtefacto(libroHechizos)
+    rolando.encontrarArtefacto(collarDivino)
     castilloDePiedra.dejarArtefactosEnCastillo(rolando)
-    rolando.recolectarArtefacto(armaduraAceroValyrio)
-    rolando.recolectarArtefacto(collarDivino)
+    rolando.encontrarArtefacto(armaduraAceroValyrio)
+    rolando.encontrarArtefacto(collarDivino)
     assert.equals
         ([espadaDelDestino,libroHechizos,collarDivino,armaduraAceroValyrio,collarDivino], rolando.historiaDeEncuentro())
    }
 
-
-
-    
-
+   test "Parte 2" {
+    rolando.poderBase(5)
+    rolando.capacidadMochila(3)
+    rolando.encontrarArtefacto(espadaDelDestino)
+    assert.equals(5, espadaDelDestino.poderDeArma())
+    rolando.encontrarArtefacto(armaduraAceroValyrio)
+    rolando.encontrarArtefacto(collarDivino)
+    assert.equals(19, rolando.poderDePelea())
+   }
 }
