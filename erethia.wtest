@@ -13,9 +13,9 @@ describe "Erethia" {
         //rolando tiene la mochila vacia de manera default
         rolando.encontrarArtefacto(espadaDelDestino)
         rolando.encontrarArtefacto(libroHechizos)
-        castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+        castilloDePiedra.llegarACastillo(rolando)
         rolando.encontrarArtefacto(collarDivino)
-        castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+        castilloDePiedra.llegarACastillo(rolando)
         assert.equals([espadaDelDestino,libroHechizos,collarDivino], castilloDePiedra.artefactosDeCastillo())
     }
 
@@ -42,13 +42,46 @@ describe "Erethia" {
         ([espadaDelDestino,libroHechizos,collarDivino,armaduraAceroValyrio,collarDivino], rolando.historiaDeEncuentro())
    }
 
-   test "Parte 2" {
+
+//Parte 2------------------------------------------------------
+   test "Parte 2.1 Batalla" {
     rolando.poderBase(5)
     rolando.capacidadMochila(3)
     rolando.encontrarArtefacto(espadaDelDestino)
-    assert.equals(5, espadaDelDestino.poderDeArma())
     rolando.encontrarArtefacto(armaduraAceroValyrio)
     rolando.encontrarArtefacto(collarDivino)
     assert.equals(19, rolando.poderDePelea())
+
+//Luego de la primera batalla
+    rolando.pelearBatalla()
+    assert.equals(18, rolando.poderDePelea())
+
+//Luego de la segunda batalla
+    rolando.pelearBatalla()
+    assert.equals(21.5, rolando.poderDePelea())
+
+//Luego de la tercera batalla
+    rolando.pelearBatalla()
+    assert.equals(24, rolando.poderDePelea())
    }
 }
+
+    test "Hechizos" {
+    rolando.poderBase(5)
+    castilloDePiedra.artefactosDeCastillo().addAll([espadaDelDestino,armaduraAceroValyrio,collarDivino])
+    rolando.mochila().add(libroHechizos)
+    libroHechizos.hechizos([bendicion, invisibilidad, invocacion])
+    assert.equals(4, libroHechizos.poderDeArma())
+
+//Luego de la primera batalla
+    rolando.pelearBatalla()
+    assert.equals(6, libroHechizos.poderDeArma())
+
+//Luego de la segunda batalla
+    rolando.pelearBatalla()
+    assert.equals(7, libroHechizos.poderDeArma())
+
+//Luego de la tercera batalla
+    rolando.pelearBatalla()
+    assert.equals(0, libroHechizos.poderDeArma())
+    }

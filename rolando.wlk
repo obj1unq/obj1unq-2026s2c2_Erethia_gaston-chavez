@@ -3,6 +3,7 @@ object rolando {
     var capacidadMochila = 2
     var historiaDeEncuentro = []
     var poderBase = 0 
+    var morada = castilloDePiedra
 
     method encontrarArtefacto(artefacto) {
       historiaDeEncuentro.add(artefacto)
@@ -23,7 +24,7 @@ object rolando {
     }
 
     method poseeArtefacto(artefacto) {
-      return self.mochila().contains(artefacto) //contains = contiene, pregunta si en la mochila dada, esta contenido el elemento dado
+      return self.artefactosEnPosecion().contains(artefacto)//contains = contiene, pregunta si en la mochila dada, esta contenido el elemento dado sea en la mochila o castillo
     }
 
     method historiaDeEncuentro() {
@@ -45,14 +46,23 @@ object rolando {
     method poderBase() {
       return poderBase
     }
+
+    method pelearBatalla() {
+      mochila.forEach({artefacto => artefacto.utilizacion()})
+      poderBase = poderBase + 1
+    }
+
+    method morada() {
+      return morada
+    }
 }
 
 object espadaDelDestino {
   var personaje = rolando
-  var utilizacion = false
+  var fueUtilizado = false
   
   method poderDeArma() {
-    if (not utilizacion){
+    if (not fueUtilizado){
       return personaje.poderBase()
     }
     else {
@@ -60,14 +70,31 @@ object espadaDelDestino {
     }
   }
 
-  method fueUtilizado() {
-    utilizacion = true
+  method utilizacion() {
+    fueUtilizado = true
   }
 }
 
 object libroHechizos {
+  var hechizos = []
   method poderDeArma() {
-    
+    if (self.hayHechizos()){
+      return hechizos.first().poderHechizo()
+    } else {
+      return 0
+    }
+  }
+
+  method hayHechizos() {
+    return not hechizos.isEmpty()
+  }
+
+  method utilizacion() {
+    return hechizos.remove(hechizos.first())
+  }
+
+  method hechizos(_hechizos) {
+    hechizos = _hechizos
   }
 }
 
@@ -81,7 +108,7 @@ object collarDivino {
   }
   
   method poderDeArma() {
-    if(rolando.poderBase() > 6){
+    if(personaje.poderBase() > 6){
       return poderBaseArma + utilizacion
     } else {
       return poderBaseArma
@@ -101,18 +128,50 @@ object armaduraAceroValyrio {
   method poderDeArma() {
     return 6
   }
+
+  method utilizacion() {
+    return 0
+  }
 }
 
 object castilloDePiedra {
   var artefactosDeCastillo = []
+  var personaje = rolando
 
-  method dejarArtefactosEnCastillo(dueño) {
-    artefactosDeCastillo.addAll(dueño.mochila()) //agrego todos los artefactos de la mochila a los artefactosd el castillo
-    dueño.mochila().clear() //limpio la mochila del dueño
+  method llegarACastillo(personaje) {
+    self.dejarArtefactosEnCastillo(personaje)
+  }
+
+  method dejarArtefactosEnCastillo(personaje) {
+    artefactosDeCastillo.addAll(personaje.mochila()) //agrego todos los artefactos de la mochila a los artefactosd el castillo
+    personaje.mochila().clear() //limpio la mochila del dueño
   }
 
   method artefactosDeCastillo() {
     return artefactosDeCastillo
   }
 }
+
+object bendicion {
+  method poderHechizo() {
+    return 4
+  }
+}
+
+object invisibilidad {
+  var personaje = rolando
+  method poderHechizo() {
+    return personaje.poderBase()
+  }
+}
+
+object invocacion {
+  var personaje = rolando
+  method poderHechizo() {
+    return personaje.morada().artefactosDeCastillo().map({artefacto => artefacto.poderDeArma()}).max()
+  }
+}
+
+//2.3 Enemigos
+
 
