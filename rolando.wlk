@@ -3,7 +3,6 @@ object rolando {
     var capacidadMochila = 2
     var historiaDeEncuentro = []
     var poderBase = 0 
-    var morada = castilloDePiedra
 
     method encontrarArtefacto(artefacto) {
       historiaDeEncuentro.add(artefacto)
@@ -36,7 +35,11 @@ object rolando {
     }
 
     method poderDePelea() {
-      return poderBase + mochila.sum{artefacto => artefacto.poderDeArma()}
+      return poderBase + self.poderDeArtefactos()
+    }
+
+    method poderDeArtefactos() {
+      return mochila.sum{artefacto => artefacto.poderDeArma()}
     }
 
     method poderBase(_poderBase) {
@@ -53,7 +56,27 @@ object rolando {
     }
 
     method morada() {
-      return morada
+      return castilloDePiedra
+    }
+}
+
+object erethia {
+  var enemigos = #{caterina, archibaldo, astra}
+  
+  method enemigos(_enemigos) {
+    enemigos = _enemigos
+  }
+
+  method esPoderoso(personaje) {
+    return enemigos.all({enemigo => personaje.poderDePelea() > enemigo.poderDePelea()})
+  }
+
+  method enemigosVencidosDe(personaje) {
+    return enemigos.filter({enemigo => personaje.poderDePelea() > enemigo.poderDePelea()})
+    }
+
+  method moradasConquistadas(){
+    return self.enemigosVencidosDe(rolando).map({enemigo => enemigo.morada()})
     }
 }
 
@@ -136,7 +159,6 @@ object armaduraAceroValyrio {
 
 object castilloDePiedra {
   var artefactosDeCastillo = []
-  var personaje = rolando
 
   method llegarACastillo(personaje) {
     self.dejarArtefactosEnCastillo(personaje)
@@ -153,25 +175,65 @@ object castilloDePiedra {
 }
 
 object bendicion {
-  method poderHechizo() {
+  method poderHechizo(personaje) {
     return 4
   }
 }
 
 object invisibilidad {
-  var personaje = rolando
-  method poderHechizo() {
+  method poderHechizo(personaje) {
     return personaje.poderBase()
   }
 }
 
 object invocacion {
-  var personaje = rolando
-  method poderHechizo() {
+  method poderHechizo(personaje) {
     return personaje.morada().artefactosDeCastillo().map({artefacto => artefacto.poderDeArma()}).max()
   }
 }
 
 //2.3 Enemigos
+object caterina {
 
+  method poderDePelea() {
+    return 28
+  }
 
+  method morada() {
+    return fortalezaDeAcero
+  }
+}
+
+object archibaldo {
+
+  method poderDePelea() {
+    return 16
+  }
+
+  method morada() {
+    return palacioDeMarmol
+  }
+}
+
+object astra {
+
+  method poderDePelea() {
+    return 14
+  }
+
+  method morada() {
+    return torreDeMarfil
+  }
+}
+
+object fortalezaDeAcero{
+  
+}
+
+object palacioDeMarmol{
+  
+}
+
+object torreDeMarfil{
+
+}

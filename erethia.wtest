@@ -23,7 +23,7 @@ describe "Erethia" {
     rolando.encontrarArtefacto(collarDivino)
     rolando.encontrarArtefacto(espadaDelDestino)
 
-    castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+    castilloDePiedra.llegarACastillo(rolando)
 
     rolando.encontrarArtefacto(armaduraAceroValyrio)
 
@@ -84,4 +84,29 @@ describe "Erethia" {
 //Luego de la tercera batalla
     rolando.pelearBatalla()
     assert.equals(0, libroHechizos.poderDeArma())
+    }
+
+    test "Batalla con enemigos" {
+        rolando.poderBase(5)
+        rolando.capacidadMochila(3)
+        rolando.mochila().add(espadaDelDestino)
+        rolando.mochila().add(armaduraAceroValyrio)
+        rolando.mochila().add(collarDivino)
+        assert.equals(19, rolando.poderDePelea())
+        erethia.enemigosVencidosDe(rolando)
+        assert.equals([palacioDeMarmol, torreDeMarfil], erethia.moradasConquistadas())
+    }
+
+    test "rolando no ees poderoso" {
+        rolando.poderBase(5)
+        assert.notThat(erethia.esPoderoso(rolando))
+    }
+
+    test "roando si es poderoso" {
+        rolando.poderBase(10)
+        rolando.capacidadMochila(3)
+        rolando.mochila().add(espadaDelDestino)
+        rolando.mochila().add(armaduraAceroValyrio)
+        rolando.mochila().add(collarDivino)
+        assert.that(erethia.esPoderoso(rolando))
     }
