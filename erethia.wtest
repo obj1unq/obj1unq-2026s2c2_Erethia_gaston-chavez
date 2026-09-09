@@ -110,3 +110,12 @@ describe "Erethia" {
         rolando.mochila().add(collarDivino)
         assert.that(erethia.esPoderoso(rolando))
     }
+
+    test "Rolando puede vencer a astra" {
+        rolando.poderBase(15)
+        rolando.capacidadMochila(3)
+        rolando.mochila().add(espadaDelDestino)
+        rolando.mochila().add(armaduraAceroValyrio)
+        rolando.mochila().add(collarDivino)
+        assert.that(rolando.poseeArtefactoLetal(astra))
+    }
