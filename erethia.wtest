@@ -1,3 +1,122 @@
 import rolando.*
 describe "Erethia" {
+    //Parte 1 (Referencias)
+    test "Rolando Recolentando artefactos" {
+        //rolando tiene la mochila vacia de manera default
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(libroHechizos)
+        rolando.encontrarArtefacto(collarDivino)
+        assert.equals([espadaDelDestino,libroHechizos], rolando.mochila())
+    }
+
+    test "Castillo de Piedra" {
+        //rolando tiene la mochila vacia de manera default
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(libroHechizos)
+        castilloDePiedra.llegarACastillo(rolando)
+        rolando.encontrarArtefacto(collarDivino)
+        castilloDePiedra.llegarACastillo(rolando)
+        assert.equals([espadaDelDestino,libroHechizos,collarDivino], castilloDePiedra.artefactosDeCastillo())
+    }
+
+    test "Rolando conoce sus posesiones" {
+    rolando.encontrarArtefacto(collarDivino)
+    rolando.encontrarArtefacto(espadaDelDestino)
+
+    castilloDePiedra.llegarACastillo(rolando)
+
+    rolando.encontrarArtefacto(armaduraAceroValyrio)
+
+    assert.equals([collarDivino,espadaDelDestino,armaduraAceroValyrio], rolando.artefactosEnPosecion())
+    assert.notThat(rolando.poseeArtefacto(libroHechizos))
+   }
+
+   test "Saber la historia de los encuentros con los artefactos" {
+    rolando.encontrarArtefacto(espadaDelDestino)
+    rolando.encontrarArtefacto(libroHechizos)
+    rolando.encontrarArtefacto(collarDivino)
+    castilloDePiedra.dejarArtefactosEnCastillo(rolando)
+    rolando.encontrarArtefacto(armaduraAceroValyrio)
+    rolando.encontrarArtefacto(collarDivino)
+    assert.equals
+        ([espadaDelDestino,libroHechizos,collarDivino,armaduraAceroValyrio,collarDivino], rolando.historiaDeEncuentro())
+   }
+
+
+//Parte 2------------------------------------------------------
+   test "Parte 2.1 Batalla" {
+    rolando.poderBase(5)
+    rolando.capacidadMochila(3)
+    rolando.encontrarArtefacto(espadaDelDestino)
+    rolando.encontrarArtefacto(armaduraAceroValyrio)
+    rolando.encontrarArtefacto(collarDivino)
+    assert.equals(19, rolando.poderDePelea())
+
+//Luego de la primera batalla
+    rolando.pelearBatalla()
+    assert.equals(18, rolando.poderDePelea())
+
+//Luego de la segunda batalla
+    rolando.pelearBatalla()
+    assert.equals(21.5, rolando.poderDePelea())
+
+//Luego de la tercera batalla
+    rolando.pelearBatalla()
+    assert.equals(24, rolando.poderDePelea())
+   }
 }
+
+    test "Hechizos" {
+    rolando.poderBase(5)
+    castilloDePiedra.artefactosDeCastillo().addAll([espadaDelDestino,armaduraAceroValyrio,collarDivino])
+    rolando.mochila().add(libroHechizos)
+    libroHechizos.hechizos([bendicion, invisibilidad, invocacion])
+    assert.equals(4, libroHechizos.poderDeArma(rolando))
+
+//Luego de la primera batalla
+    rolando.pelearBatalla()
+    assert.equals(6, libroHechizos.poderDeArma(rolando))
+
+//Luego de la segunda batalla
+    rolando.pelearBatalla()
+    assert.equals(7, libroHechizos.poderDeArma(rolando)) //explota
+
+//Luego de la tercera batalla
+    rolando.pelearBatalla()
+    assert.equals(0, libroHechizos.poderDeArma(rolando))
+    }
+
+    test "Batalla con enemigos" {
+        rolando.poderBase(5)
+        rolando.capacidadMochila(3)
+        rolando.mochila().add(espadaDelDestino)
+        rolando.mochila().add(armaduraAceroValyrio)
+        rolando.mochila().add(collarDivino)
+        assert.equals(19, rolando.poderDePelea())
+        erethia.enemigosVencidosDe(rolando)
+        assert.equals([palacioDeMarmol, torreDeMarfil], erethia.moradasConquistadas())
+    }
+
+    test "rolando no es poderoso" {
+        rolando.poderBase(5)
+        assert.notThat(erethia.esPoderoso(rolando))
+    }
+
+    test "roando si es poderoso" {
+        rolando.poderBase(10)
+        rolando.capacidadMochila(3)
+        rolando.mochila().add(espadaDelDestino)
+        rolando.mochila().add(armaduraAceroValyrio)
+        rolando.mochila().add(collarDivino)
+        assert.that(erethia.esPoderoso(rolando))
+    }
+
+    test "Rolando puede vencer a astra pero no a caterina" {
+        rolando.poderBase(15)
+        rolando.capacidadMochila(3)
+        rolando.mochila().add(espadaDelDestino)
+        rolando.mochila().add(armaduraAceroValyrio)
+        rolando.mochila().add(collarDivino)
+        assert.that(rolando.poseeArtefactoLetal(astra))
+        assert.notThat(rolando.poseeArtefactoLetal(caterina))
+    }

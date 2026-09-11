@@ -1,3 +1,259 @@
 object rolando {
- 
+    const mochila = []
+    var capacidadMochila = 2
+    const historiaDeEncuentro = []
+    var poderBase = 0 
+
+    method poseeArtefactoLetal(enemigo) {
+      return mochila.any({artefacto => self.esLetal(artefacto,enemigo)})
+    }
+
+    method artefactoLetal(enemigo) {
+        return mochila.find({artefacto => self.esLetal(artefacto,enemigo)})
+    }
+
+    method esLetal(artefacto,enemigo) {
+      return artefacto.poderDeArma(self) > enemigo.poderDePelea()
+    }
+
+    method encontrarArtefacto(artefacto) {
+      self.guardarArtefactoEnHistoria(artefacto)
+      self.recolectarArtefacto(artefacto)
+    }
+
+    method guardarArtefactoEnHistoria(artefacto) {
+      return historiaDeEncuentro.add(artefacto)
+    }
+
+    method recolectarArtefacto(artefacto) {
+      if(mochila.size() < capacidadMochila){ //si la longitud de la mochila, es menor a la capacidad de la misma, guardo el artefacto, en caso contrario nada.
+      mochila.add(artefacto)
+      }
+    }
+    method capacidadMochila(_capacidadMochila) {
+      capacidadMochila = _capacidadMochila
+    }
+
+    method artefactosEnPosecion() {
+      return castilloDePiedra.artefactosDeCastillo() + self.mochila() 
+    }
+
+    method poseeArtefacto(artefacto) {
+      return self.artefactosEnPosecion().contains(artefacto)//contains = contiene, pregunta si en la mochila dada, esta contenido el elemento dado sea en la mochila o castillo
+    }
+
+    method historiaDeEncuentro() {
+      return historiaDeEncuentro
+    }
+
+    method mochila() {
+      return mochila
+    }
+
+    method poderDePelea() {
+      return poderBase + self.poderDeArtefactos()
+    }
+
+    method poderDeArtefactos() {
+      return mochila.sum{artefacto => artefacto.poderDeArma(self)}
+    }
+
+    method poderBase(_poderBase) {
+      poderBase = _poderBase
+    }
+
+    method poderBase() {
+      return poderBase
+    }
+
+    method pelearBatalla() {
+      mochila.forEach({artefacto => artefacto.utilizacion()})
+      poderBase = poderBase + 1
+    }
+
+    method morada() {
+      return castilloDePiedra
+    }
+
+    method limpiarMochila() {
+      return mochila.clear()
+    }
+}
+
+object erethia {
+  const enemigos = #{caterina, archibaldo, astra}
+  
+  method enemigos() {
+    return enemigos
+  }
+
+  method esPoderoso(personaje) {
+    return enemigos.all({enemigo => self.puedeVencerEnemigo(personaje,enemigo)})
+  }
+
+  method enemigosVencidosDe(personaje) {
+    return enemigos.filter({enemigo => self.puedeVencerEnemigo(personaje,enemigo)})
+  }
+
+  method puedeVencerEnemigo(personaje,enemigo) {
+    return personaje.poderDePelea() > enemigo.poderDePelea()
+  }
+
+  method moradasConquistadas(){
+    return self.enemigosVencidosDe(rolando).map({enemigo => enemigo.morada()})
+    }
+}
+
+object espadaDelDestino {
+  var fueUtilizado = false
+  
+  method poderDeArma(personaje) {
+    if (not fueUtilizado){
+      return personaje.poderBase()
+    }
+    else {
+      return personaje.poderBase() / 2
+    }
+  }
+
+  method utilizacion() {
+    fueUtilizado = true
+  }
+}
+
+object libroHechizos {
+  var hechizos = []
+  method poderDeArma(personaje) {
+    if (self.hayHechizos()){
+      return hechizos.first().poderHechizo(personaje)
+    } else {
+      return 0
+    }
+  }
+
+  method hayHechizos() {
+    return not hechizos.isEmpty()
+  }
+
+  method utilizacion() {
+    return hechizos.remove(hechizos.first())
+  }
+
+  method hechizos(_hechizos) {
+    hechizos = _hechizos
+  }
+}
+
+object collarDivino {
+  const poderBaseArma = 3
+  var utilizacion = 0
+
+  method utilizacion() {
+    utilizacion = utilizacion + 1
+    return utilizacion
+  }
+  
+  method poderDeArma(personaje) {
+    if(personaje.poderBase() > 6){
+      return poderBaseArma + utilizacion
+    } else {
+      return poderBaseArma
+    }
+  }
+
+  method utilizacion(_utilizacion) {
+    utilizacion = _utilizacion
+  }
+
+  method poderBaseArma() {
+    return poderBaseArma
+  }
+}
+
+object armaduraAceroValyrio {
+  method poderDeArma(personaje) {
+    return 6
+  }
+
+  method utilizacion() {
+    return 0
+  }
+}
+
+object castilloDePiedra {
+  const artefactosDeCastillo = []
+
+  method llegarACastillo(personaje) {
+    self.dejarArtefactosEnCastillo(personaje)
+  }
+
+  method dejarArtefactosEnCastillo(personaje) {
+    artefactosDeCastillo.addAll(personaje.mochila()) //agrego todos los artefactos de la mochila a los artefactosd el castillo
+    personaje.limpiarMochila() //limpio la mochila del dueño
+  }
+
+  method artefactosDeCastillo() {
+    return artefactosDeCastillo
+  }
+}
+
+object bendicion {
+  method poderHechizo(personaje) {
+    return 4
+  }
+}
+
+object invisibilidad {
+  method poderHechizo(personaje) {
+    return personaje.poderBase()
+  }
+}
+
+object invocacion {
+  method poderHechizo(personaje) {
+    return personaje.morada().artefactosDeCastillo().map({artefacto => artefacto.poderDeArma(personaje)}).max()
+  }
+}
+
+//2.3 Enemigos
+object caterina {
+  method poderDePelea() {
+    return 28
+  }
+
+  method morada() {
+    return fortalezaDeAcero
+  }
+}
+
+object archibaldo {
+  method poderDePelea() {
+    return 16
+  }
+
+  method morada() {
+    return palacioDeMarmol
+  }
+}
+
+object astra {
+  method poderDePelea() {
+    return 14
+  }
+
+  method morada() {
+    return torreDeMarfil
+  }
+}
+
+object fortalezaDeAcero{
+  
+}
+
+object palacioDeMarmol{
+  
+}
+
+object torreDeMarfil{
+
 }
