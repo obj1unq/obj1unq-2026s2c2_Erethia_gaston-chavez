@@ -17,8 +17,12 @@ object rolando {
     }
 
     method encontrarArtefacto(artefacto) {
-      historiaDeEncuentro.add(artefacto)
+      self.guardarArtefactoEnHistoria(artefacto)
       self.recolectarArtefacto(artefacto)
+    }
+
+    method guardarArtefactoEnHistoria(artefacto) {
+      return historiaDeEncuentro.add(artefacto)
     }
 
     method recolectarArtefacto(artefacto) {
@@ -77,23 +81,23 @@ object rolando {
 }
 
 object erethia {
-  var enemigos = #{caterina, archibaldo, astra}
+  const enemigos = #{caterina, archibaldo, astra}
   
-  method enemigos(_enemigos) {
-    enemigos = _enemigos
-  }
-
   method enemigos() {
     return enemigos
   }
 
   method esPoderoso(personaje) {
-    return enemigos.all({enemigo => personaje.poderDePelea() > enemigo.poderDePelea()})
+    return enemigos.all({enemigo => self.puedeVencerEnemigo(personaje,enemigo)})
   }
 
   method enemigosVencidosDe(personaje) {
-    return enemigos.filter({enemigo => personaje.poderDePelea() > enemigo.poderDePelea()})
-    }
+    return enemigos.filter({enemigo => self.puedeVencerEnemigo(personaje,enemigo)})
+  }
+
+  method puedeVencerEnemigo(personaje,enemigo) {
+    return personaje.poderDePelea() > enemigo.poderDePelea()
+  }
 
   method moradasConquistadas(){
     return self.enemigosVencidosDe(rolando).map({enemigo => enemigo.morada()})
@@ -121,7 +125,7 @@ object libroHechizos {
   var hechizos = []
   method poderDeArma(personaje) {
     if (self.hayHechizos()){
-      return hechizos.first().poderHechizo()
+      return hechizos.first().poderHechizo(personaje)
     } else {
       return 0
     }
@@ -141,11 +145,12 @@ object libroHechizos {
 }
 
 object collarDivino {
-  var poderBaseArma = 3
+  const poderBaseArma = 3
   var utilizacion = 0
 
   method utilizacion() {
     utilizacion = utilizacion + 1
+    return utilizacion
   }
   
   method poderDeArma(personaje) {
@@ -206,13 +211,12 @@ object invisibilidad {
 
 object invocacion {
   method poderHechizo(personaje) {
-    return personaje.morada().artefactosDeCastillo().map({artefacto => artefacto.poderDeArma()}).max()
+    return personaje.morada().artefactosDeCastillo().map({artefacto => artefacto.poderDeArma(personaje)}).max()
   }
 }
 
 //2.3 Enemigos
 object caterina {
-
   method poderDePelea() {
     return 28
   }
@@ -223,7 +227,6 @@ object caterina {
 }
 
 object archibaldo {
-
   method poderDePelea() {
     return 16
   }
@@ -234,7 +237,6 @@ object archibaldo {
 }
 
 object astra {
-
   method poderDePelea() {
     return 14
   }

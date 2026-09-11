@@ -225,3 +225,19 @@ Si Rolando tiene de base 15, la espada, la armadura y el collar, entonces cuenta
 
     - ¿Qué **tipo** de elementos contienen?
     - ¿Qué mensaje polimórfico (perteneciente al tipo mencionado) utilizaste dentro de un bloque?
+
+* Respuestas:
+   - Tipo Personaje | Tipo Artefacto | Tipo Morada | Tipo hechizo
+
+   - El tipo personaje compone los mensajes: poderDePelea() y morada()
+   - El tipo artefacto compone los mensajes: poderDeArma(personaje) y utilizacion()
+   - El tipo Morada compone los mensajes: ¿ninguno?
+   - El tipo hechizo compone los mensajes: poderHechizo(personaje)
+
+   - El tipo personaje lo usa rolando,astra,caterina y archibaldo
+   - El tipo artefacto lo usa rolando
+   - el tipo morada: ¿ninguno?
+   - el tipo hechizo lo usa el libro de hechizos
+
+   - El tipo de elementos que contienen las colecciones, son: los artefactos, enemigos(personajes), moradas y hechizos
+   - El mensaje polimorfico que utilize en los bloques, fueron poderDeArma(personaje), poderDePelea()

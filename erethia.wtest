@@ -71,19 +71,19 @@ describe "Erethia" {
     castilloDePiedra.artefactosDeCastillo().addAll([espadaDelDestino,armaduraAceroValyrio,collarDivino])
     rolando.mochila().add(libroHechizos)
     libroHechizos.hechizos([bendicion, invisibilidad, invocacion])
-    assert.equals(4, libroHechizos.poderDeArma())
+    assert.equals(4, libroHechizos.poderDeArma(rolando))
 
 //Luego de la primera batalla
     rolando.pelearBatalla()
-    assert.equals(6, libroHechizos.poderDeArma())
+    assert.equals(6, libroHechizos.poderDeArma(rolando))
 
 //Luego de la segunda batalla
     rolando.pelearBatalla()
-    assert.equals(7, libroHechizos.poderDeArma())
+    assert.equals(7, libroHechizos.poderDeArma(rolando)) //explota
 
 //Luego de la tercera batalla
     rolando.pelearBatalla()
-    assert.equals(0, libroHechizos.poderDeArma())
+    assert.equals(0, libroHechizos.poderDeArma(rolando))
     }
 
     test "Batalla con enemigos" {
@@ -97,7 +97,7 @@ describe "Erethia" {
         assert.equals([palacioDeMarmol, torreDeMarfil], erethia.moradasConquistadas())
     }
 
-    test "rolando no ees poderoso" {
+    test "rolando no es poderoso" {
         rolando.poderBase(5)
         assert.notThat(erethia.esPoderoso(rolando))
     }
@@ -111,11 +111,12 @@ describe "Erethia" {
         assert.that(erethia.esPoderoso(rolando))
     }
 
-    test "Rolando puede vencer a astra" {
+    test "Rolando puede vencer a astra pero no a caterina" {
         rolando.poderBase(15)
         rolando.capacidadMochila(3)
         rolando.mochila().add(espadaDelDestino)
         rolando.mochila().add(armaduraAceroValyrio)
         rolando.mochila().add(collarDivino)
         assert.that(rolando.poseeArtefactoLetal(astra))
+        assert.notThat(rolando.poseeArtefactoLetal(caterina))
     }
